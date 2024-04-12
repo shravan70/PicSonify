@@ -1,27 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    <div id="heading" align="center"> <h2>Turn Your Image to Voice</h2> </div>
-    <div id="main">
-        <form action="/" method="post" enctype="multipart/form-data">
-            <div class="container-sm">
-             <div class="input-group">
-                <input type="file" id="img" name="imagefile" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" class="form-control" accept="image/*">
-                <input type="submit" value="What's In Image" type="button" id="inputGroupFileAddon04" class="btn btn-outline-secondary">
-             </div>
-            </div>
-          </form>
-        <div>
-            <p align="center" class="output"> {{prediction}}</p>
-        </div>
+<div class="container">
+    <h1 class="main_heading" align="center">PICSONIFY</h1>
+</div>
+    <form align = "center" action="/" method="post" enctype="multipart/form-data">
+        <label for="images" class="drop-container" id="dropcontainer">
+            <span class="drop-title">Drop files here</span>
+            or
+            <input type="file" name="imagefile" id="images" accept="image/*" required>
+        </label>  
+        <button type="submit" class="button" id="submit_button">Send</button>
+    </form>
+<div align="center">
+    {% if prediction %}
+        <p >{{ prediction }}</p>
+        {% if audio_path %}
+            <audio controls autoplay id="audio_player">
+                <source src="{{ url_for('get_audio', audio_path=audio_path) }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+</div>
+            <script>
 
+// Function to clear local storage
+    function clearLocalStorage() {
+        localStorage.clear(); // Clears all items from local storage
+    }
 
-    </div>
+    // Function to refresh the whole webpage
+    function refreshPage() {
+        window.location.reload(); // Reloads the current document
+    }
+
+    // Add event listener to the audio player to clear local storage and reload the page after playback
+    document.getElementById("audio_player").addEventListener("ended", function() {
+        clearLocalStorage(); // Call the clearLocalStorage function after audio playback ends
+        refreshPage(); // Call the re
+            </script>
+        {% endif %}
+    {% endif %}
 </body>
 </html>
